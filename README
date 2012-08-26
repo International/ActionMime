@@ -1,0 +1,2 @@
+A simple & dumb mime type detector. It tries to infer bytes from the header of a file.
+Project inspired by https://github.com/SixArm/sixarm_ruby_magic_number_type

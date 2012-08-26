@@ -2,6 +2,7 @@ package
 {
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
+	import flash.utils.Endian;
 	/**
 	 * ...
 	 * @author G
@@ -30,10 +31,10 @@ package
 			hints["\x1F\x8B"] = "application/x-gzip";
 			hints["7Z\xBC\xAF\x27\x1C"] = "application/7zip";
 			
-			detectLargest();
+			initLargestHeader();
 		}
 		
-		private function detectLargest():void {
+		private function initLargestHeader():void {
 			for each(var s:String in hints) {
 				if (s.length > largestNumber) {
 					largestNumber = s.length;
@@ -46,18 +47,18 @@ package
 			
 			byteArray.position = 0;
 			
-			var currentHeader:String = "";
-
+			var currentHeader:ByteArray = new ByteArray();
+			
 			for (var i:Number = 0; i < largestNumber && byteArray.bytesAvailable; i++)
 			{
-				currentHeader += String.fromCharCode(byteArray.readByte());
-				var matching:Object = hints[currentHeader];
+				currentHeader.writeByte(byteArray.readByte());
+				var matching:Object = hints[currentHeader.toString()];
 				if (matching != null) {
 					detected = matching as String;
 					break;
 				}
 			}
-			
+
 			return detected;
 		}
 		

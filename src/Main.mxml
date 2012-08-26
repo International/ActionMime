@@ -10,21 +10,45 @@
 	<fx:Script>
 		<![CDATA[
 		
+		import flash.events.Event;
+		import flash.events.MouseEvent;
+		import flash.net.FileReference;
 		import flash.utils.ByteArray;
 		import mx.controls.Alert;
 		
+		private var fref:FileReference = new FileReference();
+		
 		public function init():void {
-			var bts:ByteArray = new ByteArray();
-			var pdfHeader:String = "%PDF";
-			for (var i:Number = 0; i < pdfHeader.length; i++)
-			{
-				bts.writeByte(pdfHeader.charCodeAt(i));
-			}
-			var hd:HintDetector = new HintDetector(bts);
-			var hint:String = hd.detect();
-			Alert.show("Null=" + hint);
+			txtarea1.addEventListener(MouseEvent.CLICK, clickedArea);
+			fref.addEventListener(Event.SELECT, fileSelected);
+			fref.addEventListener(Event.COMPLETE, loadComplete);
 		}
+		
+		public function loadComplete(event:Event):void {
+			var detectedType:String = new HintDetector(fref.data).detect();
+			Alert.show("Detected was:" + detectedType);
+		}
+		
+		public function fileSelected(event:Event):void {
+			fref.load();
+		}
+		
+		public function clickedArea(event:MouseEvent):void {
+			fref.browse();
+		}
+			
 		]]>
 	</fx:Script>
+	
+	<s:TextInput id="txtarea1"
+                                                width="222"
+                                                height="21"
+                                                color="Black"
+                                                x="0"
+                                                y="19"
+                                                text="">
+
+    </s:TextInput>
+                        
 	
 </s:Application>

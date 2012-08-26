@@ -13,30 +13,16 @@
 		import flash.utils.ByteArray;
 		import mx.controls.Alert;
 		
-		public function getPdfHeader():String {
-			return "%PDF";
-		}
-		
-		public function isPdf(ba:ByteArray):Boolean {
-			ba.position = 0;
-			var expectedPdf:String = getPdfHeader();
-			var currentHeader:String = "";
-			for (var i:Number = 0; i < 4; i++) {
-				currentHeader += String.fromCharCode(ba.readByte());
-			}
-			return currentHeader == getPdfHeader();
-		}
-		
 		public function init():void {
 			var bts:ByteArray = new ByteArray();
-			var pdfHeader:String = getPdfHeader();
+			var pdfHeader:String = "%PDF";
 			for (var i:Number = 0; i < pdfHeader.length; i++)
 			{
 				bts.writeByte(pdfHeader.charCodeAt(i));
 			}
-			//Alert.show(isPdf(bts).toString());
-			bts.position = 0;
-			Alert.show(isPdf(bts).toString());
+			var hd:HintDetector = new HintDetector(bts);
+			var hint:String = hd.detect();
+			Alert.show("Null=" + hint);
 		}
 		]]>
 	</fx:Script>

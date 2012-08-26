@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+               xmlns:s="library://ns.adobe.com/flex/spark"
+               xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="init()">
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+		
+		import flash.utils.ByteArray;
+		import mx.controls.Alert;
+		
+		public function getPdfHeader():String {
+			return "%PDF";
+		}
+		
+		public function isPdf(ba:ByteArray):Boolean {
+			ba.position = 0;
+			var expectedPdf:String = getPdfHeader();
+			var currentHeader:String = "";
+			for (var i:Number = 0; i < 4; i++) {
+				currentHeader += String.fromCharCode(ba.readByte());
+			}
+			return currentHeader == getPdfHeader();
+		}
+		
+		public function init():void {
+			var bts:ByteArray = new ByteArray();
+			var pdfHeader:String = getPdfHeader();
+			for (var i:Number = 0; i < pdfHeader.length; i++)
+			{
+				bts.writeByte(pdfHeader.charCodeAt(i));
+			}
+			//Alert.show(isPdf(bts).toString());
+			bts.position = 0;
+			Alert.show(isPdf(bts).toString());
+		}
+		]]>
+	</fx:Script>
+	
+</s:Application>
